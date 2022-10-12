@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import ru.practicum.shareit.user.dto.UserDto;
+import ru.practicum.shareit.user.model.User;
 
 import java.util.stream.Collectors;
 
@@ -13,6 +14,7 @@ import java.util.stream.Collectors;
 public class UserValidation {
 
     private final UserRepository userRepository;
+    private final UserRepository1 repository;
 
     public void userIsValidAdd(UserDto userDto) {
         if (userDto.getName() == null) {
@@ -40,7 +42,8 @@ public class UserValidation {
     }
 
     public void userIsPresent(Long userId) {
-        if (userRepository.find(userId) == null) {
+        if (!repository.findById(userId).isPresent()) {
+//        if (userRepository.find(userId) == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found.");
         }
     }

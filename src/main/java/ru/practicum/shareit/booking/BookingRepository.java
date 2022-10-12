@@ -1,0 +1,17 @@
+package ru.practicum.shareit.booking;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import ru.practicum.shareit.booking.model.Booking;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+public interface BookingRepository extends JpaRepository<Booking, Long> {
+    List<Booking> findByUserIdOrderByStartDesc(Long userId);
+    List<Booking> findByItemIdInOrderByStartDesc(List<Long> itemsId);
+
+    List<Booking> findByItemIdAndStartAfterOrderByStart(Long itemId, LocalDateTime date);
+
+    List<Booking> findByItemIdAndEndBeforeOrderByEndDesc(Long itemId, LocalDateTime date);
+
+}

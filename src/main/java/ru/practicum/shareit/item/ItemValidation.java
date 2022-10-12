@@ -8,12 +8,15 @@ import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.UserValidation;
 
+import java.util.Optional;
+
 @Service
 @AllArgsConstructor
 public class ItemValidation {
 
     private final UserValidation userValidation;
     private final ItemRepository itemRepository;
+    private final ItemRepository1 repository;
 
     public void itemIsValidAdd(Long userId, ItemDto itemDto) {
 
@@ -48,10 +51,13 @@ public class ItemValidation {
         }
         userValidation.userIsPresent(userId);
         Item item = itemRepository.find(id);
-        if (item == null) {
+
+//        if (item == null) {
+        Optional<Item> itemOptional = repository.findById(id);
+        if (!itemOptional.isPresent()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Item dont find.");
         }
-        if (!(userId.equals(item.getUserId()))) {
+        if (!(userId.equals(itemOptional.get().getUserId()))) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User dont own this item.");
         }
     }

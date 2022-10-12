@@ -2,16 +2,26 @@ package ru.practicum.shareit.item;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.practicum.shareit.booking.BookingRepository;
+import ru.practicum.shareit.booking.BookingService;
+import ru.practicum.shareit.booking.model.Booking;
+import ru.practicum.shareit.errors.NotFound;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.user.model.User;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class ItemServiceImpl implements ItemService {
 
     private final ItemRepository itemRepository;
+    private final ItemRepository1 repository;
+    private final BookingRepository bookingRepository;
     private final ItemMapper itemMapper;
     private final ItemValidation validation;
 
@@ -20,7 +30,9 @@ public class ItemServiceImpl implements ItemService {
         validation.itemIsValidAdd(userId, itemDto);
         Item item = itemMapper.itemDtoToItem(itemDto);
         item.setUserId(userId);
-        return itemRepository.add(item);
+//        item.setUserId(userId);
+//        return itemRepository.add(item);
+        return repository.save(item);
     }
 
     @Override
@@ -29,7 +41,8 @@ public class ItemServiceImpl implements ItemService {
         validation.itemIsValidUpdate(userId, id);
 
         Item item = find(id);
-        Item updatedItem = new Item(id, userId, item.getName(), item.getDescription(), item.getAvailable());
+        Item updatedItem = new Item(id, userId, item.getName()
+                , item.getDescription(), item.getAvailable(), null, null);
 
         if (itemDto.getName() != null) {
             updatedItem.setName(itemDto.getName());
@@ -41,28 +54,62 @@ public class ItemServiceImpl implements ItemService {
             updatedItem.setAvailable(itemDto.getAvailable());
         }
 
-        return itemRepository.update(id, updatedItem);
+//        return itemRepository.update(id, updatedItem);
+        return repository.save(updatedItem);
 
     }
 
     @Override
     public void delete(Long id, Long userId) {
         validation.itemIsValidDelete(userId, id);
-        itemRepository.delete(id);
+//        itemRepository.delete(id);
+        repository.delete(find(id));
     }
 
     @Override
     public Item find(Long id) {
-        return itemRepository.find(id);
+
+        Optional<Item> optionalItem = repository.findById(id);
+        if (optionalItem.isPresent()) {
+            Item item = optionalItem.get();
+            item.setLastBooking(findLast(id));
+            item.setNextBooking(findNext(id));
+            return item;
+        } else {
+            throw new NotFound();
+        }
+//        return itemRepository.find(id);
+    }
+
+    public Booking findLast(Long itemId) {
+        List<Booking> bookings = bookingRepository.findByItemIdAndEndBeforeOrderByEndDesc(itemId, LocalDateTime.now());
+        if (!bookings.isEmpty()) {
+            return bookings.get(0);
+        }
+        return null;
+    }
+
+    public Booking findNext(Long itemId) {
+        List<Booking> bookings = bookingRepository.findByItemIdAndStartAfterOrderByStart(itemId, LocalDateTime.now());
+        if (!bookings.isEmpty()) {
+            return bookings.get(0);
+        }
+        return null;
     }
 
     @Override
     public List<Item> findUserItems(Long userId) {
-        return itemRepository.findUserItems(userId);
+        return repository.findByUserId(userId);
+//        return itemRepository.findUserItems(userId);
     }
 
     @Override
     public List<Item> findItemsByText(String text) {
-        return itemRepository.findItemsByText(text);
+        if (text.isEmpty()) {
+            return new ArrayList<>();
+        } else {
+            return repository.findByAvailableAndDescriptionContainingIgnoreCaseOrAvailableAndNameContainingIgnoreCase(true, text, true, text);
+//        return itemRepository.findItemsByText(text);
+        }
     }
 }
