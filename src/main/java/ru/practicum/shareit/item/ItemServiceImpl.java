@@ -3,12 +3,11 @@ package ru.practicum.shareit.item;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.booking.BookingRepository;
-import ru.practicum.shareit.booking.BookingService;
+import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.errors.NotFound;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Item;
-import ru.practicum.shareit.user.model.User;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -23,6 +22,7 @@ public class ItemServiceImpl implements ItemService {
     private final ItemRepository1 repository;
     private final BookingRepository bookingRepository;
     private final ItemMapper itemMapper;
+    //    private final BookingMapper bookingMapper;
     private final ItemValidation validation;
 
     @Override
@@ -81,20 +81,26 @@ public class ItemServiceImpl implements ItemService {
 //        return itemRepository.find(id);
     }
 
-    public Booking findLast(Long itemId) {
+    public BookingDto findLast(Long itemId) {
         List<Booking> bookings = bookingRepository.findByItemIdAndEndBeforeOrderByEndDesc(itemId, LocalDateTime.now());
         if (!bookings.isEmpty()) {
-            return bookings.get(0);
+            return bookingForItem(bookings.get(0));
         }
         return null;
     }
 
-    public Booking findNext(Long itemId) {
+
+
+    public BookingDto findNext(Long itemId) {
         List<Booking> bookings = bookingRepository.findByItemIdAndStartAfterOrderByStart(itemId, LocalDateTime.now());
         if (!bookings.isEmpty()) {
-            return bookings.get(0);
+            return bookingForItem(bookings.get(0));
         }
         return null;
+    }
+
+    private BookingDto bookingForItem(Booking booking) {
+        return new BookingDto(booking.getItemId(), booking.getUserId(), booking.getStart(), booking.getEnd());
     }
 
     @Override

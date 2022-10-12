@@ -40,8 +40,8 @@ public class BookingServiceImpl implements BookingService {
             throw new NotFound();
         }
         if ((bookingDto.getStart().isAfter(bookingDto.getEnd()))
-            || bookingDto.getStart().isBefore(LocalDateTime.now())
-            || bookingDto.getEnd().isBefore(LocalDateTime.now())) {
+                || bookingDto.getStart().isBefore(LocalDateTime.now())
+                || bookingDto.getEnd().isBefore(LocalDateTime.now())) {
             throw new BadRequest();
         }
         Booking booking = bookingMapper.bookingDtoToBooking(userId, bookingDto);
@@ -56,7 +56,8 @@ public class BookingServiceImpl implements BookingService {
         if (!(booking.getItem().getUserId().equals(userId))) {
             throw new NotFound();
         }
-        if (booking.getStatus().equals(Status.APPROVED.toString())) {
+        if ((booking.getStatus().equals(Status.APPROVED.toString()))
+                || (booking.getStatus().equals(Status.REJECTED.toString()))) {
             throw new BadRequest();
         }
         if (approved) {
@@ -119,7 +120,7 @@ public class BookingServiceImpl implements BookingService {
                     .stream().map((booking -> addItemAndBooker(booking)))
                     .filter(booking ->
                             booking.getStart().isBefore(LocalDateTime.now())
-                            && booking.getEnd().isAfter(LocalDateTime.now()))
+                                    && booking.getEnd().isAfter(LocalDateTime.now()))
                     .collect(Collectors.toList());
             return bookings;
         } else if (state.equals("PAST")) {
@@ -170,7 +171,7 @@ public class BookingServiceImpl implements BookingService {
                     .stream().map((booking -> addItemAndBooker(booking)))
                     .filter(booking ->
                             booking.getStart().isBefore(LocalDateTime.now())
-                            && booking.getEnd().isAfter(LocalDateTime.now()))
+                                    && booking.getEnd().isAfter(LocalDateTime.now()))
                     .collect(Collectors.toList());
         } else if (state.equals("PAST")) {
             return repository.findByItemIdInOrderByStartDesc(itemsId)

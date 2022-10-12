@@ -23,7 +23,7 @@ public class BookingMapperImpl implements BookingMapper {
 
     @Override
     public BookingDto bookingToBookingDto(Booking booking) {
-        return new BookingDto(booking.getItemId(), booking.getStart(), booking.getEnd());
+        return new BookingDto(booking.getItemId(), booking.getUserId(), booking.getStart(), booking.getEnd());
     }
 
     @Override
