@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
-//@RequiredArgsConstructor
 @Repository
 public class ItemRepositoryImpl implements ItemRepository {
 

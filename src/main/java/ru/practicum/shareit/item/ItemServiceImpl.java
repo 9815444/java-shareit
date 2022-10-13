@@ -13,7 +13,6 @@ import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
 
-import java.awt.print.Book;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +28,6 @@ public class ItemServiceImpl implements ItemService {
     private final BookingRepository bookingRepository;
     private final ItemMapper itemMapper;
     private final CommentMapper commentMapper;
-    //    private final BookingMapper bookingMapper;
     private final ItemValidation validation;
 
     @Override
@@ -37,8 +35,6 @@ public class ItemServiceImpl implements ItemService {
         validation.itemIsValidAdd(userId, itemDto);
         Item item = itemMapper.itemDtoToItem(itemDto);
         item.setUserId(userId);
-//        item.setUserId(userId);
-//        return itemRepository.add(item);
         return repository.save(item);
     }
 
@@ -61,7 +57,6 @@ public class ItemServiceImpl implements ItemService {
             updatedItem.setAvailable(itemDto.getAvailable());
         }
 
-//        return itemRepository.update(id, updatedItem);
         return repository.save(updatedItem);
 
     }
@@ -92,9 +87,6 @@ public class ItemServiceImpl implements ItemService {
             item.setLastBooking(findLast(id, userId == item.getUserId()));
             item.setNextBooking(findNext(id, userId == item.getUserId()));
             List<Comment> comments = commentRepository.findByItemId(item.getId());
-//            for (Comment comment : comments) {
-//                comment.setAuthorName();
-//            }
             item.setComments(comments);
             return item;
         } else {

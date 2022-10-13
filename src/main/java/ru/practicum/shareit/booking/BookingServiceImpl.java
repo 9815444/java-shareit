@@ -86,16 +86,6 @@ public class BookingServiceImpl implements BookingService {
         return booking;
     }
 
-//    @Override
-//    public Booking findLast(Long itemId) {
-//        return null;
-//    }
-//
-//    @Override
-//    public Booking findNext(Long itemId) {
-//        return null;
-//    }
-
     @Override
     public List<Booking> findAll(Long userId, String state) {
         if (userId == null) {

@@ -52,7 +52,6 @@ public class ItemValidation {
         userValidation.userIsPresent(userId);
         Item item = itemRepository.find(id);
 
-//        if (item == null) {
         Optional<Item> itemOptional = repository.findById(id);
         if (!itemOptional.isPresent()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Item dont find.");

@@ -15,6 +15,7 @@ public interface ItemService {
     void delete(Long id, Long userId);
 
     Item find(Long id);
+
     Item findByUser(Long id, Long userId);
 
     List<Item> findUserItems(Long userId);
