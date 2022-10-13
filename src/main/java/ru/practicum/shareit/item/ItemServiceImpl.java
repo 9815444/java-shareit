@@ -44,8 +44,8 @@ public class ItemServiceImpl implements ItemService {
         validation.itemIsValidUpdate(userId, id);
 
         Item item = find(id);
-        Item updatedItem = new Item(id, userId, item.getName()
-                , item.getDescription(), item.getAvailable(), null, null, null);
+        Item updatedItem = new Item(id, userId, item.getName(),
+                item.getDescription(), item.getAvailable(), null, null, null);
 
         if (itemDto.getName() != null) {
             updatedItem.setName(itemDto.getName());
@@ -146,8 +146,8 @@ public class ItemServiceImpl implements ItemService {
             throw new BadRequest();
         }
         List<Booking> bookings =
-                bookingRepository.findByUserIdAndItemIdAndStatusAndEndBefore(userId, itemId
-                        , Status.APPROVED.toString(), LocalDateTime.now());
+                bookingRepository.findByUserIdAndItemIdAndStatusAndEndBefore(userId, itemId,
+                        Status.APPROVED.toString(), LocalDateTime.now());
         if (bookings.isEmpty()) {
             throw new BadRequest();
         }

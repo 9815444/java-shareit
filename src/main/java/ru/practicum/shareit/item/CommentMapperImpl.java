@@ -23,7 +23,7 @@ public class CommentMapperImpl implements CommentMapper {
 
     @Override
     public Comment commentDtoToComment(CommentDto commentDto, Long userId, Long itemId) {
-        return new Comment(null, userId, itemId
-                , commentDto.getText(), commentDto.getCreated(), userService.findUser(userId).getName());
+        return new Comment(null, userId, itemId,
+                commentDto.getText(), commentDto.getCreated(), userService.findUser(userId).getName());
     }
 }
