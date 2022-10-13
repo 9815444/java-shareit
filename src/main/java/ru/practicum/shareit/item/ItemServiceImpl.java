@@ -84,8 +84,13 @@ public class ItemServiceImpl implements ItemService {
         Optional<Item> optionalItem = repository.findById(id);
         if (optionalItem.isPresent()) {
             Item item = optionalItem.get();
-            item.setLastBooking(findLast(id, userId == item.getUserId()));
-            item.setNextBooking(findNext(id, userId == item.getUserId()));
+//           //boolean itsOwner = userId.longValue() == item.getUserId().longValue();
+            boolean itsOwner = false;
+            if (item.getUserId().equals(userId)) {
+                itsOwner = true;
+            }
+            item.setLastBooking(findLast(id, itsOwner));
+            item.setNextBooking(findNext(id, itsOwner));
             List<Comment> comments = commentRepository.findByItemId(item.getId());
             item.setComments(comments);
             return item;
@@ -124,8 +129,12 @@ public class ItemServiceImpl implements ItemService {
     public List<Item> findUserItems(Long userId) {
         List<Item> items = repository.findByUserIdOrderById(userId);
         for (Item item : items) {
-            item.setLastBooking(findLast(item.getId(), userId == item.getUserId()));
-            item.setNextBooking(findNext(item.getId(), userId == item.getUserId()));
+            boolean itsOwner = false;
+            if (item.getUserId().equals(userId)) {
+                itsOwner = true;
+            }
+            item.setLastBooking(findLast(item.getId(), itsOwner));
+            item.setNextBooking(findNext(item.getId(), itsOwner));
             item.setComments(commentRepository.findByItemId(item.getId()));
         }
         return items;
