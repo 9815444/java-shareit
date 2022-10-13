@@ -15,7 +15,7 @@ import java.util.Optional;
 public class ItemValidation {
 
     private final UserValidation userValidation;
-    private final ItemRepository itemRepository;
+//    private final ItemRepository itemRepository;
     private final ItemRepository1 repository;
 
     public void itemIsValidAdd(Long userId, ItemDto itemDto) {
@@ -50,7 +50,7 @@ public class ItemValidation {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User id is null.");
         }
         userValidation.userIsPresent(userId);
-        Item item = itemRepository.find(id);
+//        Item item = itemRepository.find(id);
 
         Optional<Item> itemOptional = repository.findById(id);
         if (!itemOptional.isPresent()) {

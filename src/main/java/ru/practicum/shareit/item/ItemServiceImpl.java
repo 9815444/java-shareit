@@ -22,7 +22,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ItemServiceImpl implements ItemService {
 
-    private final ItemRepository itemRepository;
+//    private final ItemRepository itemRepository;
     private final ItemRepository1 repository;
     private final CommentRepository commentRepository;
     private final BookingRepository bookingRepository;
