@@ -16,9 +16,7 @@ import java.util.Optional;
 @Transactional
 public class UserServiceImpl implements UserService {
 
-    private final UserRepository userRepository;
-
-    private final UserRepository1 repository;
+        private final UserRepository1 repository;
     private final UserMapper userMapper;
     private final UserValidation validation;
 

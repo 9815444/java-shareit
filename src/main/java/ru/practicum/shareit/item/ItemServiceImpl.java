@@ -3,12 +3,17 @@ package ru.practicum.shareit.item;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.booking.BookingRepository;
-import ru.practicum.shareit.booking.dto.BookingDto;
+import ru.practicum.shareit.booking.dto.BookingDtoForItem;
 import ru.practicum.shareit.booking.model.Booking;
+import ru.practicum.shareit.booking.model.Status;
+import ru.practicum.shareit.errors.BadRequest;
 import ru.practicum.shareit.errors.NotFound;
+import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
 
+import java.awt.print.Book;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,8 +25,10 @@ public class ItemServiceImpl implements ItemService {
 
     private final ItemRepository itemRepository;
     private final ItemRepository1 repository;
+    private final CommentRepository commentRepository;
     private final BookingRepository bookingRepository;
     private final ItemMapper itemMapper;
+    private final CommentMapper commentMapper;
     //    private final BookingMapper bookingMapper;
     private final ItemValidation validation;
 
@@ -42,7 +49,7 @@ public class ItemServiceImpl implements ItemService {
 
         Item item = find(id);
         Item updatedItem = new Item(id, userId, item.getName()
-                , item.getDescription(), item.getAvailable(), null, null);
+                , item.getDescription(), item.getAvailable(), null, null, null);
 
         if (itemDto.getName() != null) {
             updatedItem.setName(itemDto.getName());
@@ -62,7 +69,6 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public void delete(Long id, Long userId) {
         validation.itemIsValidDelete(userId, id);
-//        itemRepository.delete(id);
         repository.delete(find(id));
     }
 
@@ -72,16 +78,34 @@ public class ItemServiceImpl implements ItemService {
         Optional<Item> optionalItem = repository.findById(id);
         if (optionalItem.isPresent()) {
             Item item = optionalItem.get();
-            item.setLastBooking(findLast(id));
-            item.setNextBooking(findNext(id));
             return item;
         } else {
             throw new NotFound();
         }
-//        return itemRepository.find(id);
     }
 
-    public BookingDto findLast(Long itemId) {
+    public Item findByUser(Long id, Long userId) {
+
+        Optional<Item> optionalItem = repository.findById(id);
+        if (optionalItem.isPresent()) {
+            Item item = optionalItem.get();
+            item.setLastBooking(findLast(id, userId == item.getUserId()));
+            item.setNextBooking(findNext(id, userId == item.getUserId()));
+            List<Comment> comments = commentRepository.findByItemId(item.getId());
+//            for (Comment comment : comments) {
+//                comment.setAuthorName();
+//            }
+            item.setComments(comments);
+            return item;
+        } else {
+            throw new NotFound();
+        }
+    }
+
+    public BookingDtoForItem findLast(Long itemId, boolean itsOwner) {
+        if (!itsOwner) {
+            return null;
+        }
         List<Booking> bookings = bookingRepository.findByItemIdAndEndBeforeOrderByEndDesc(itemId, LocalDateTime.now());
         if (!bookings.isEmpty()) {
             return bookingForItem(bookings.get(0));
@@ -89,9 +113,10 @@ public class ItemServiceImpl implements ItemService {
         return null;
     }
 
-
-
-    public BookingDto findNext(Long itemId) {
+    public BookingDtoForItem findNext(Long itemId, boolean itsOwner) {
+        if (!itsOwner) {
+            return null;
+        }
         List<Booking> bookings = bookingRepository.findByItemIdAndStartAfterOrderByStart(itemId, LocalDateTime.now());
         if (!bookings.isEmpty()) {
             return bookingForItem(bookings.get(0));
@@ -99,14 +124,19 @@ public class ItemServiceImpl implements ItemService {
         return null;
     }
 
-    private BookingDto bookingForItem(Booking booking) {
-        return new BookingDto(booking.getItemId(), booking.getUserId(), booking.getStart(), booking.getEnd());
+    private BookingDtoForItem bookingForItem(Booking booking) {
+        return new BookingDtoForItem(booking.getId(), booking.getUserId());
     }
 
     @Override
     public List<Item> findUserItems(Long userId) {
-        return repository.findByUserId(userId);
-//        return itemRepository.findUserItems(userId);
+        List<Item> items = repository.findByUserIdOrderById(userId);
+        for (Item item : items) {
+            item.setLastBooking(findLast(item.getId(), userId == item.getUserId()));
+            item.setNextBooking(findNext(item.getId(), userId == item.getUserId()));
+            item.setComments(commentRepository.findByItemId(item.getId()));
+        }
+        return items;
     }
 
     @Override
@@ -115,7 +145,22 @@ public class ItemServiceImpl implements ItemService {
             return new ArrayList<>();
         } else {
             return repository.findByAvailableAndDescriptionContainingIgnoreCaseOrAvailableAndNameContainingIgnoreCase(true, text, true, text);
-//        return itemRepository.findItemsByText(text);
         }
+    }
+
+    @Override
+    public Comment addComment(Long userId, Long itemId, CommentDto commentDto) {
+        if (commentDto.getText().isEmpty()) {
+            throw new BadRequest();
+        }
+        List<Booking> bookings =
+                bookingRepository.findByUserIdAndItemIdAndStatusAndEndBefore(userId, itemId
+                        , Status.APPROVED.toString(), LocalDateTime.now());
+        if (bookings.isEmpty()) {
+            throw new BadRequest();
+        }
+        commentDto.setCreated(LocalDateTime.now());
+        Comment comment = commentMapper.commentDtoToComment(commentDto, userId, itemId);
+        return commentRepository.save(comment);
     }
 }

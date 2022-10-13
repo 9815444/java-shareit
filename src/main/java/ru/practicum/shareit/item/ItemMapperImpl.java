@@ -16,7 +16,7 @@ public class ItemMapperImpl implements ItemMapper {
     public Item itemDtoToItem(ItemDto itemDto) {
         return new Item(null, null, itemDto.getName()
                 , itemDto.getDescription(), itemDto.getAvailable()
-                , null, null);
+                , null, null, null);
     }
 
 }

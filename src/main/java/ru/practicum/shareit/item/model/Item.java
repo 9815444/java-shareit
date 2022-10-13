@@ -5,9 +5,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import ru.practicum.shareit.booking.dto.BookingDto;
+import ru.practicum.shareit.booking.dto.BookingDtoForItem;
 import ru.practicum.shareit.booking.model.Booking;
 
 import javax.persistence.*;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -33,8 +35,11 @@ public class Item {
     private Boolean available;
 
     @Transient
-    private BookingDto lastBooking;
+    private BookingDtoForItem lastBooking;
 
     @Transient
-    private BookingDto nextBooking;
+    private BookingDtoForItem nextBooking;
+
+    @Transient
+    private List<Comment> comments;
 }
