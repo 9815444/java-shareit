@@ -6,12 +6,14 @@ import ru.practicum.shareit.booking.BookingRepository;
 import ru.practicum.shareit.booking.dto.BookingDtoForItem;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.Status;
-import ru.practicum.shareit.errors.BadRequest;
-import ru.practicum.shareit.errors.NotFound;
+import ru.practicum.shareit.errors.BadRequestException;
+import ru.practicum.shareit.errors.NotFoundException;
 import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.user.UserRepository;
+import ru.practicum.shareit.user.model.User;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -22,18 +24,20 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ItemServiceImpl implements ItemService {
 
-//    private final ItemRepository itemRepository;
-    private final ItemRepository1 repository;
+    private final ItemRepository repository;
+
+    private final UserRepository userRepository;
+
     private final CommentRepository commentRepository;
+
     private final BookingRepository bookingRepository;
-    private final ItemMapper itemMapper;
-    private final CommentMapper commentMapper;
+
     private final ItemValidation validation;
 
     @Override
     public Item add(Long userId, ItemDto itemDto) {
         validation.itemIsValidAdd(userId, itemDto);
-        Item item = itemMapper.itemDtoToItem(itemDto);
+        Item item = ItemMapper.itemDtoToItem(itemDto);
         item.setUserId(userId);
         return repository.save(item);
     }
@@ -75,7 +79,7 @@ public class ItemServiceImpl implements ItemService {
             Item item = optionalItem.get();
             return item;
         } else {
-            throw new NotFound();
+            throw new NotFoundException();
         }
     }
 
@@ -84,7 +88,6 @@ public class ItemServiceImpl implements ItemService {
         Optional<Item> optionalItem = repository.findById(id);
         if (optionalItem.isPresent()) {
             Item item = optionalItem.get();
-//           //boolean itsOwner = userId.longValue() == item.getUserId().longValue();
             boolean itsOwner = false;
             if (item.getUserId().equals(userId)) {
                 itsOwner = true;
@@ -95,7 +98,7 @@ public class ItemServiceImpl implements ItemService {
             item.setComments(comments);
             return item;
         } else {
-            throw new NotFound();
+            throw new NotFoundException();
         }
     }
 
@@ -152,16 +155,18 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public Comment addComment(Long userId, Long itemId, CommentDto commentDto) {
         if (commentDto.getText().isEmpty()) {
-            throw new BadRequest();
+            throw new BadRequestException();
         }
         List<Booking> bookings =
                 bookingRepository.findByUserIdAndItemIdAndStatusAndEndBefore(userId, itemId,
                         Status.APPROVED.toString(), LocalDateTime.now());
         if (bookings.isEmpty()) {
-            throw new BadRequest();
+            throw new BadRequestException();
         }
         commentDto.setCreated(LocalDateTime.now());
-        Comment comment = commentMapper.commentDtoToComment(commentDto, userId, itemId);
+        User user = userRepository.findById(userId).get();
+        Comment comment = CommentMapper.commentDtoToComment(commentDto, userId, itemId);
+        comment.setAuthorName(user.getName());
         return commentRepository.save(comment);
     }
 }

@@ -16,7 +16,7 @@ public class ItemValidation {
 
     private final UserValidation userValidation;
 //    private final ItemRepository itemRepository;
-    private final ItemRepository1 repository;
+    private final ItemRepository repository;
 
     public void itemIsValidAdd(Long userId, ItemDto itemDto) {
 

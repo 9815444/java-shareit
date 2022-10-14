@@ -2,7 +2,7 @@ package ru.practicum.shareit.user;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.practicum.shareit.errors.NotFound;
+import ru.practicum.shareit.errors.NotFoundException;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.model.User;
 
@@ -15,15 +15,14 @@ import java.util.Optional;
 @Transactional
 public class UserServiceImpl implements UserService {
 
-    private final UserRepository1 repository;
-    private final UserMapper userMapper;
+    private final UserRepository repository;
     private final UserValidation validation;
 
     @Override
     public User addUser(UserDto userDto) {
         validation.userIsValidAdd(userDto);
-        User user = userMapper.userDtoToUser(userDto);
-        User user1 = repository.save(userMapper.userDtoToUser(userDto));
+        User user = UserMapper.userDtoToUser(userDto);
+        User user1 = repository.save(user);
         return user1;
     }
 
@@ -57,7 +56,7 @@ public class UserServiceImpl implements UserService {
         if (optionalUser.isPresent()) {
             return optionalUser.get();
         } else {
-            throw new NotFound();
+            throw new NotFoundException();
         }
     }
 

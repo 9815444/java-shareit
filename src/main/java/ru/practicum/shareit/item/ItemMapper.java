@@ -3,9 +3,17 @@ package ru.practicum.shareit.item;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Item;
 
+public class ItemMapper {
 
-public interface ItemMapper {
-    ItemDto itemToItemDto(Item item);
+    public static ItemDto itemToItemDto(Item item) {
+        return new ItemDto(item.getId(), item.getName(), item.getDescription(), item.getAvailable());
+    }
 
-    Item itemDtoToItem(ItemDto itemDto);
+    public static Item itemDtoToItem(ItemDto itemDto) {
+        return new Item(null, null, itemDto.getName(),
+                itemDto.getDescription(), itemDto.getAvailable(),
+                null, null, null);
+
+    }
+
 }
