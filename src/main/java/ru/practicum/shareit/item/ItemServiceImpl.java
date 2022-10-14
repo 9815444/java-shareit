@@ -22,18 +22,19 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ItemServiceImpl implements ItemService {
 
-//    private final ItemRepository itemRepository;
     private final ItemRepository1 repository;
+
     private final CommentRepository commentRepository;
+
     private final BookingRepository bookingRepository;
-//    private final ItemMapper itemMapper;
+
     private final CommentMapper commentMapper;
+
     private final ItemValidation validation;
 
     @Override
     public Item add(Long userId, ItemDto itemDto) {
         validation.itemIsValidAdd(userId, itemDto);
-//        Item item = itemMapper.itemDtoToItem(itemDto); TODO статическиеМаперы
         Item item = ItemMapper2.itemDtoToItem(itemDto);
         item.setUserId(userId);
         return repository.save(item);
@@ -85,7 +86,6 @@ public class ItemServiceImpl implements ItemService {
         Optional<Item> optionalItem = repository.findById(id);
         if (optionalItem.isPresent()) {
             Item item = optionalItem.get();
-//           //boolean itsOwner = userId.longValue() == item.getUserId().longValue();
             boolean itsOwner = false;
             if (item.getUserId().equals(userId)) {
                 itsOwner = true;

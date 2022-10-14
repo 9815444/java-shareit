@@ -16,15 +16,12 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository1 repository;
-    private final UserMapper userMapper;
     private final UserValidation validation;
 
     @Override
     public User addUser(UserDto userDto) {
         validation.userIsValidAdd(userDto);
-//        User user = userMapper.userDtoToUser(userDto); TODO статическиеМаперы
         User user = UserMapper2.userDtoToUser(userDto);
-//        User user1 = repository.save(userMapper.userDtoToUser(userDto));
         User user1 = repository.save(user);
         return user1;
     }

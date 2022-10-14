@@ -25,9 +25,8 @@ public class BookingServiceImpl implements BookingService {
     private final BookingRepository repository;
 
     private final ItemService itemService;
-    private final UserService userService;
 
-//    private final BookingMapper bookingMapper;
+    private final UserService userService;
 
     @Override
     public Booking add(Long userId, BookingDto bookingDto) {
