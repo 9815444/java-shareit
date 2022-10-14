@@ -22,8 +22,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public User addUser(UserDto userDto) {
         validation.userIsValidAdd(userDto);
-        User user = userMapper.userDtoToUser(userDto);
-        User user1 = repository.save(userMapper.userDtoToUser(userDto));
+//        User user = userMapper.userDtoToUser(userDto); TODO статическиеМаперы
+        User user = UserMapper2.userDtoToUser(userDto);
+//        User user1 = repository.save(userMapper.userDtoToUser(userDto));
+        User user1 = repository.save(user);
         return user1;
     }
 
