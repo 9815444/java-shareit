@@ -27,7 +27,7 @@ public class BookingServiceImpl implements BookingService {
     private final ItemService itemService;
     private final UserService userService;
 
-    private final BookingMapper bookingMapper;
+//    private final BookingMapper bookingMapper;
 
     @Override
     public Booking add(Long userId, BookingDto bookingDto) {
@@ -44,7 +44,8 @@ public class BookingServiceImpl implements BookingService {
                 || bookingDto.getEnd().isBefore(LocalDateTime.now())) {
             throw new BadRequest();
         }
-        Booking booking = bookingMapper.bookingDtoToBooking(userId, bookingDto);
+//        Booking booking = bookingMapper.bookingDtoToBooking(userId, bookingDto);  TODO статическиеМаперы
+        Booking booking = BookingMapper2.bookingDtoToBooking(userId, bookingDto);
         booking.setUserId(userId);
         booking.setStatus(Status.WAITING.toString());
         return repository.save(booking);

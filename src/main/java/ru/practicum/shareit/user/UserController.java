@@ -26,17 +26,17 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    private void deleteUser(@PathVariable Long id) {
+    public void deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);
     }
 
     @GetMapping("/{id}")
-    private User getUser(@PathVariable Long id) {
+    public User getUser(@PathVariable Long id) {
         return userService.findUser(id);
     }
 
     @GetMapping("")
-    private List<User> getAllUser() {
+    public List<User> getAllUser() {
         return userService.findAll();
     }
 }

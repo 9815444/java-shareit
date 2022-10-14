@@ -33,22 +33,22 @@ public class ItemController {
     }
 
     @DeleteMapping("/{id}")
-    private void deleteItem(@RequestHeader("X-Sharer-User-Id") Long userId, @PathVariable Long id) {
+    public void deleteItem(@RequestHeader("X-Sharer-User-Id") Long userId, @PathVariable Long id) {
         itemService.delete(id, userId);
     }
 
     @GetMapping("/{id}")
-    private Item getItem(@RequestHeader("X-Sharer-User-Id") Long userId, @PathVariable Long id) {
+    public Item getItem(@RequestHeader("X-Sharer-User-Id") Long userId, @PathVariable Long id) {
         return itemService.findByUser(id, userId);
     }
 
     @GetMapping("")
-    private List<Item> getUserItems(@RequestHeader("X-Sharer-User-Id") Long userId) {
+    public List<Item> getUserItems(@RequestHeader("X-Sharer-User-Id") Long userId) {
         return itemService.findUserItems(userId);
     }
 
     @GetMapping("/search")
-    private List<Item> searching(@RequestParam String text) {
+    public List<Item> searching(@RequestParam String text) {
         return itemService.findItemsByText(text);
     }
 
