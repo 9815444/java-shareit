@@ -4,7 +4,11 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+import ru.practicum.shareit.errors.BadRequestException;
 import ru.practicum.shareit.user.dto.UserDto;
+
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
 
 @Service
 @AllArgsConstructor
@@ -22,7 +26,19 @@ public class UserValidation {
         emailValidation(userDto.getEmail());
     }
 
-    private void emailValidation(String email) {
+//    private void emailValidation(String email) {
+//       String regexPattern = "^(?=.{1,64}@)[A-Za-z0-9\\+_-]+(\\.[A-Za-z0-9\\+_-]+)*@"
+//                + "[^-][A-Za-z0-9\\+-]+(\\.[A-Za-z0-9\\+-]+)*(\\.[A-Za-z]{2,})$";
+//       EmailValidation.patternMatches(email, regexPattern));
+//    }
+
+    public void emailValidation(String email) {
+        try {
+            InternetAddress emailAddr = new InternetAddress(email);
+            emailAddr.validate();
+        } catch (AddressException ex) {
+            throw new BadRequestException();
+        }
     }
 
     public void userIsValidUpdate(UserDto userDto) {
