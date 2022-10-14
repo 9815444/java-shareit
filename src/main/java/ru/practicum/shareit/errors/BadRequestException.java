@@ -1,4 +1,4 @@
 package ru.practicum.shareit.errors;
 
-public class BadRequest extends RuntimeException {
+public class BadRequestException extends RuntimeException {
 }

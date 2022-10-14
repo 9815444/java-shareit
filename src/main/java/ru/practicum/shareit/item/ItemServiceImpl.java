@@ -6,8 +6,8 @@ import ru.practicum.shareit.booking.BookingRepository;
 import ru.practicum.shareit.booking.dto.BookingDtoForItem;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.Status;
-import ru.practicum.shareit.errors.BadRequest;
-import ru.practicum.shareit.errors.NotFound;
+import ru.practicum.shareit.errors.BadRequestException;
+import ru.practicum.shareit.errors.NotFoundException;
 import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Comment;
@@ -79,7 +79,7 @@ public class ItemServiceImpl implements ItemService {
             Item item = optionalItem.get();
             return item;
         } else {
-            throw new NotFound();
+            throw new NotFoundException();
         }
     }
 
@@ -98,7 +98,7 @@ public class ItemServiceImpl implements ItemService {
             item.setComments(comments);
             return item;
         } else {
-            throw new NotFound();
+            throw new NotFoundException();
         }
     }
 
@@ -155,13 +155,13 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public Comment addComment(Long userId, Long itemId, CommentDto commentDto) {
         if (commentDto.getText().isEmpty()) {
-            throw new BadRequest();
+            throw new BadRequestException();
         }
         List<Booking> bookings =
                 bookingRepository.findByUserIdAndItemIdAndStatusAndEndBefore(userId, itemId,
                         Status.APPROVED.toString(), LocalDateTime.now());
         if (bookings.isEmpty()) {
-            throw new BadRequest();
+            throw new BadRequestException();
         }
         commentDto.setCreated(LocalDateTime.now());
         User user = userRepository.findById(userId).get();
