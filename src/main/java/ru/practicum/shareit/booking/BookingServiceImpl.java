@@ -48,6 +48,8 @@ public class BookingServiceImpl implements BookingService {
         Booking booking = BookingMapper2.bookingDtoToBooking(userId, bookingDto);
         booking.setUserId(userId);
         booking.setStatus(Status.WAITING.toString());
+        booking.setBooker(user);
+        booking.setItem(item);
         return repository.save(booking);
     }
 
