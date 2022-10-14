@@ -15,13 +15,13 @@ import java.util.Optional;
 @Transactional
 public class UserServiceImpl implements UserService {
 
-    private final UserRepository1 repository;
+    private final UserRepository repository;
     private final UserValidation validation;
 
     @Override
     public User addUser(UserDto userDto) {
         validation.userIsValidAdd(userDto);
-        User user = UserMapper2.userDtoToUser(userDto);
+        User user = UserMapper.userDtoToUser(userDto);
         User user1 = repository.save(user);
         return user1;
     }

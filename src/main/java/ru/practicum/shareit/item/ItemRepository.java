@@ -5,7 +5,7 @@ import ru.practicum.shareit.item.model.Item;
 
 import java.util.List;
 
-public interface ItemRepository1 extends JpaRepository<Item, Long> {
+public interface ItemRepository extends JpaRepository<Item, Long> {
     List<Item> findByUserIdOrderById(Long userId);
 
     List<Item> findByAvailableAndDescriptionContainingIgnoreCaseOrAvailableAndNameContainingIgnoreCase(Boolean available, String text, Boolean available1, String text1);

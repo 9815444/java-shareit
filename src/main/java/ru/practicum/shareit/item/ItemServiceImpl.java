@@ -12,6 +12,8 @@ import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.user.UserRepository;
+import ru.practicum.shareit.user.model.User;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -22,7 +24,9 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ItemServiceImpl implements ItemService {
 
-    private final ItemRepository1 repository;
+    private final ItemRepository repository;
+
+    private final UserRepository userRepository;
 
     private final CommentRepository commentRepository;
 
@@ -35,7 +39,7 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public Item add(Long userId, ItemDto itemDto) {
         validation.itemIsValidAdd(userId, itemDto);
-        Item item = ItemMapper2.itemDtoToItem(itemDto);
+        Item item = ItemMapper.itemDtoToItem(itemDto);
         item.setUserId(userId);
         return repository.save(item);
     }
@@ -162,7 +166,10 @@ public class ItemServiceImpl implements ItemService {
             throw new BadRequest();
         }
         commentDto.setCreated(LocalDateTime.now());
-        Comment comment = commentMapper.commentDtoToComment(commentDto, userId, itemId);
+        User user = userRepository.findById(userId).get();
+//        Comment comment = commentMapper.commentDtoToComment(commentDto, userId, itemId); TODO статическиеМаперы
+        Comment comment = CommentMapper2.commentDtoToComment(commentDto, userId, itemId);
+        comment.setAuthorName(user.getName());
         return commentRepository.save(comment);
     }
 }

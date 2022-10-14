@@ -10,7 +10,7 @@ import ru.practicum.shareit.user.dto.UserDto;
 @AllArgsConstructor
 public class UserValidation {
 
-    private final UserRepository1 repository;
+    private final UserRepository repository;
 
     public void userIsValidAdd(UserDto userDto) {
         if (userDto.getName() == null) {

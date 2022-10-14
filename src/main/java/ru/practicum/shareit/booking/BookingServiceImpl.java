@@ -44,7 +44,7 @@ public class BookingServiceImpl implements BookingService {
             throw new BadRequest();
         }
 //        Booking booking = bookingMapper.bookingDtoToBooking(userId, bookingDto);  TODO статическиеМаперы
-        Booking booking = BookingMapper2.bookingDtoToBooking(userId, bookingDto);
+        Booking booking = BookingMapper.bookingDtoToBooking(userId, bookingDto);
         booking.setUserId(userId);
         booking.setStatus(Status.WAITING.toString());
         booking.setBooker(user);
