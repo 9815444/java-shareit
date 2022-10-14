@@ -32,8 +32,6 @@ public class ItemServiceImpl implements ItemService {
 
     private final BookingRepository bookingRepository;
 
-    private final CommentMapper commentMapper;
-
     private final ItemValidation validation;
 
     @Override
@@ -167,8 +165,7 @@ public class ItemServiceImpl implements ItemService {
         }
         commentDto.setCreated(LocalDateTime.now());
         User user = userRepository.findById(userId).get();
-//        Comment comment = commentMapper.commentDtoToComment(commentDto, userId, itemId); TODO статическиеМаперы
-        Comment comment = CommentMapper2.commentDtoToComment(commentDto, userId, itemId);
+        Comment comment = CommentMapper.commentDtoToComment(commentDto, userId, itemId);
         comment.setAuthorName(user.getName());
         return commentRepository.save(comment);
     }
