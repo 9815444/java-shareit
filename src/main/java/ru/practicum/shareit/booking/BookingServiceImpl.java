@@ -1,6 +1,8 @@
 package ru.practicum.shareit.booking;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingDtoForItem;
@@ -202,6 +204,135 @@ public class BookingServiceImpl implements BookingService {
                     .filter(booking -> booking.getStatus().equals("WAITING"))
                     .collect(Collectors.toList());
             return bookings;
+        } else {
+            throw new UnsupportedStatusException(state);
+        }
+    }
+
+    @Override
+    public List<Booking> findAll(Long userId, String state, Long from, Long size) {
+
+        if ((from == null) || (size == null)) {
+            return findAll(userId, state);
+        }
+        if ((from < 0) || (size <= 0)) {
+            throw new BadRequestException();
+        }
+
+        if (userId == null) {
+            throw new NotFoundException();
+        }
+        if (state == null) {
+            state = "ALL";
+        }
+
+        Long countBooking =  Long.valueOf(repository.findByUserIdOrderByStartDesc(userId).size());
+
+
+        int fromPage = from.intValue() / size.intValue();
+//        Pageable pageable = PageRequest.of(from.intValue(), size.intValue());
+        Pageable pageable = PageRequest.of(fromPage, size.intValue());
+
+        User user = findUser(userId);
+
+        if (state.equals("ALL")) {
+            List<Booking> bookings = repository.findByUserIdOrderByStartDesc(userId, pageable).getContent()
+                    .stream().map((booking -> addItemAndBooker(booking))).collect(Collectors.toList());
+            return bookings;
+        } else if (state.equals("FUTURE")) {
+            List<Booking> bookings = repository.findByUserIdOrderByStartDesc(userId, pageable).getContent()
+                    .stream().map((booking -> addItemAndBooker(booking)))
+                    .filter(booking -> booking.getStart().isAfter(LocalDateTime.now()))
+                    .collect(Collectors.toList());
+            return bookings;
+        } else if (state.equals("CURRENT")) {
+            List<Booking> bookings = repository.findByUserIdOrderByStartDesc(userId, pageable).getContent()
+                    .stream().map((booking -> addItemAndBooker(booking)))
+                    .filter(booking ->
+                            booking.getStart().isBefore(LocalDateTime.now())
+                                    && booking.getEnd().isAfter(LocalDateTime.now()))
+                    .collect(Collectors.toList());
+            return bookings;
+        } else if (state.equals("PAST")) {
+            List<Booking> bookings = repository.findByUserIdOrderByStartDesc(userId, pageable).getContent()
+                    .stream().map((booking -> addItemAndBooker(booking)))
+                    .filter(booking -> booking.getEnd().isBefore(LocalDateTime.now()))
+                    .collect(Collectors.toList());
+            return bookings;
+        } else if (state.equals("REJECTED")) {
+            List<Booking> bookings = repository.findByUserIdOrderByStartDesc(userId, pageable).getContent()
+                    .stream().map((booking -> addItemAndBooker(booking)))
+                    .filter(booking -> booking.getStatus().equals("REJECTED"))
+                    .collect(Collectors.toList());
+            return bookings;
+        } else if (state.equals("WAITING")) {
+            List<Booking> bookings = repository.findByUserIdOrderByStartDesc(userId, pageable).getContent()
+                    .stream().map((booking -> addItemAndBooker(booking)))
+                    .filter(booking -> booking.getStatus().equals("WAITING"))
+                    .collect(Collectors.toList());
+            return bookings;
+        } else {
+            throw new UnsupportedStatusException(state);
+        }
+    }
+
+    @Override
+    public List<Booking> findAllByOwner(Long ownerId, String state, Long from, Long size) {
+
+        if ((from == null) || (size == null)) {
+            return findAllByOwner(ownerId, state);
+        }
+        if ((from < 0) || (size <= 0)) {
+            throw new BadRequestException();
+        }
+
+        if (ownerId == null) {
+            throw new NotFoundException();
+        }
+        if (state == null) {
+            state = "ALL";
+        }
+
+//        Pageable pageable = PageRequest.of(from.intValue(), size.intValue());
+
+        int fromPage = from.intValue() / size.intValue();
+//        Pageable pageable = PageRequest.of(from.intValue(), size.intValue());
+        Pageable pageable = PageRequest.of(fromPage, size.intValue());
+
+        User owner = findUser(ownerId);
+        List<Long> itemsId = findUserItems(ownerId).stream()
+                .map((item -> item.getId())).collect(Collectors.toList());
+        if (state.equals("ALL")) {
+            return repository.findByItemIdInOrderByStartDesc(itemsId, pageable).getContent()
+                    .stream().map((booking -> addItemAndBooker(booking)))
+                    .collect(Collectors.toList());
+        } else if (state.equals("FUTURE")) {
+            return repository.findByItemIdInOrderByStartDesc(itemsId, pageable).getContent()
+                    .stream().map((booking -> addItemAndBooker(booking)))
+                    .filter(booking -> booking.getStart().isAfter(LocalDateTime.now()))
+                    .collect(Collectors.toList());
+        } else if (state.equals("CURRENT")) {
+            return repository.findByItemIdInOrderByStartDesc(itemsId, pageable).getContent()
+                    .stream().map((booking -> addItemAndBooker(booking)))
+                    .filter(booking ->
+                            booking.getStart().isBefore(LocalDateTime.now())
+                                    && booking.getEnd().isAfter(LocalDateTime.now()))
+                    .collect(Collectors.toList());
+        } else if (state.equals("PAST")) {
+            return repository.findByItemIdInOrderByStartDesc(itemsId, pageable).getContent()
+                    .stream().map((booking -> addItemAndBooker(booking)))
+                    .filter(booking -> booking.getEnd().isBefore(LocalDateTime.now()))
+                    .collect(Collectors.toList());
+        } else if (state.equals("REJECTED")) {
+            return repository.findByItemIdInOrderByStartDesc(itemsId, pageable).getContent()
+                    .stream().map((booking -> addItemAndBooker(booking)))
+                    .filter(booking -> booking.getStatus().equals("REJECTED"))
+                    .collect(Collectors.toList());
+        } else if (state.equals("WAITING")) {
+            return repository.findByItemIdInOrderByStartDesc(itemsId, pageable).getContent()
+                    .stream().map((booking -> addItemAndBooker(booking)))
+                    .filter(booking -> booking.getStatus().equals("WAITING"))
+                    .collect(Collectors.toList());
         } else {
             throw new UnsupportedStatusException(state);
         }

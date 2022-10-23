@@ -14,6 +14,10 @@ public interface BookingService {
 
     List<Booking> findAll(Long userId, String state);
 
+    List<Booking> findAll(Long userId, String state, Long from, Long size);
+
+    List<Booking> findAllByOwner(Long ownerId, String state, Long from, Long size);
+
     List<Booking> findAllByOwner(Long ownerId, String state);
 
 }
