@@ -94,7 +94,6 @@ public class BookingServiceImpl implements BookingService {
         return new BookingDtoForItem(booking.getId(), booking.getUserId());
     }
 
-
     @Override
     public Booking add(Long userId, BookingDto bookingDto) {
 //        User user = userService.findUser(userId);
