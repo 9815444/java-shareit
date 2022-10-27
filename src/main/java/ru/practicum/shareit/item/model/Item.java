@@ -23,9 +23,6 @@ public class Item {
 
     @Column(name = "user_id")
     private Long userId;
-//
-//    @Column(name = "request_id")
-//    private Long requestId;
 
     @ManyToOne
     @JoinColumn(name = "request_id")

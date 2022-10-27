@@ -1,7 +1,7 @@
 package ru.practicum.shareit.item;
 
 import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.item.dto.ItemDto2;
+import ru.practicum.shareit.item.dto.ItemDtoFull;
 import ru.practicum.shareit.item.model.Item;
 
 public class ItemMapper {
@@ -10,12 +10,12 @@ public class ItemMapper {
         return new ItemDto(item.getId(), item.getName(), item.getDescription(), item.getAvailable(), item.getRequest().getId());
     }
 
-    public static ItemDto2 itemToItemDto2(Item item) {
+    public static ItemDtoFull itemToItemDto2(Item item) {
         Long requestId = null;
         if (item.getRequest() != null) {
             requestId = item.getRequest().getId();
         }
-        return new ItemDto2(item.getId(), item.getName(), item.getDescription(), item.getAvailable(),
+        return new ItemDtoFull(item.getId(), item.getName(), item.getDescription(), item.getAvailable(),
                 requestId, item.getLastBooking(), item.getNextBooking(), item.getComments());
     }
 

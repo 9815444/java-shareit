@@ -11,7 +11,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.item.dto.ItemDto2;
+import ru.practicum.shareit.item.dto.ItemDtoFull;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.request.Request;
 import ru.practicum.shareit.request.dto.RequestDto;
@@ -46,7 +46,7 @@ public class BookingControllerTest {
         User user = new User(Long.valueOf(1), "name", "email@email.com");
         Item item = new Item(1L, user.getId(), null, "test", "test", true, null, null, new ArrayList<>());
         ItemDto itemDto = new ItemDto(1L, "test", "test", true, null);
-        ItemDto2 itemDto2 = new ItemDto2(1L, "test", "test", true, null, null, null, new ArrayList<>());
+        ItemDtoFull itemDtoFull = new ItemDtoFull(1L, "test", "test", true, null, null, null, new ArrayList<>());
 
         Booking booking = new Booking();
         booking.setId(1L);

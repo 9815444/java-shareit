@@ -4,7 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.web.server.ResponseStatusException;
 import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.item.dto.ItemDto2;
+import ru.practicum.shareit.item.dto.ItemDtoFull;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.UserValidation;
 import ru.practicum.shareit.user.dto.UserDto;
@@ -88,7 +88,7 @@ public class ItemValidationTest {
         User user = new User(Long.valueOf(1), "name", "email@email.com");
         Item item = new Item(1L, user.getId(), null, "test", "test", true, null, null, new ArrayList<>());
         ItemDto itemDto = new ItemDto(1L, "test", "test", true, null);
-        ItemDto2 itemDto2 = new ItemDto2(1L, "test", "test", true, null, null, null, new ArrayList<>());
+        ItemDtoFull itemDtoFull = new ItemDtoFull(1L, "test", "test", true, null, null, null, new ArrayList<>());
 
         when(itemRepository.findById(any())).thenReturn(Optional.ofNullable(null));
 
@@ -105,7 +105,7 @@ public class ItemValidationTest {
         User user = new User(Long.valueOf(1), "name", "email@email.com");
         Item item = new Item(1L, 2L, null, "test", "test", true, null, null, new ArrayList<>());
         ItemDto itemDto = new ItemDto(1L, "test", "test", true, null);
-        ItemDto2 itemDto2 = new ItemDto2(1L, "test", "test", true, null, null, null, new ArrayList<>());
+        ItemDtoFull itemDtoFull = new ItemDtoFull(1L, "test", "test", true, null, null, null, new ArrayList<>());
 
         when(itemRepository.findById(any())).thenReturn(Optional.ofNullable(item));
 
@@ -122,7 +122,7 @@ public class ItemValidationTest {
         User user = new User(Long.valueOf(1), "name", "email@email.com");
         Item item = new Item(1L, 1L, null, "test", "test", true, null, null, new ArrayList<>());
         ItemDto itemDto = new ItemDto(1L, "test", "test", true, null);
-        ItemDto2 itemDto2 = new ItemDto2(1L, "test", "test", true, null, null, null, new ArrayList<>());
+        ItemDtoFull itemDtoFull = new ItemDtoFull(1L, "test", "test", true, null, null, null, new ArrayList<>());
 
         when(itemRepository.findById(any())).thenReturn(Optional.ofNullable(item));
 
@@ -137,7 +137,7 @@ public class ItemValidationTest {
         User user = new User(Long.valueOf(1), "name", "email@email.com");
         Item item = new Item(1L, 1L, null, "test", "test", true, null, null, new ArrayList<>());
         ItemDto itemDto = new ItemDto(1L, "test", "test", true, null);
-        ItemDto2 itemDto2 = new ItemDto2(1L, "test", "test", true, null, null, null, new ArrayList<>());
+        ItemDtoFull itemDtoFull = new ItemDtoFull(1L, "test", "test", true, null, null, null, new ArrayList<>());
 
         when(itemRepository.findById(any())).thenReturn(Optional.ofNullable(item));
 

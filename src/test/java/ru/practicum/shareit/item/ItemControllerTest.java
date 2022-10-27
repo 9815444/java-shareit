@@ -11,7 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.item.dto.ItemDto2;
+import ru.practicum.shareit.item.dto.ItemDtoFull;
 import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.dto.UserDto;
@@ -51,8 +51,8 @@ public class ItemControllerTest {
         User user = new User(Long.valueOf(1), "name", "email@email.com");
         Item item = new Item(1L, user.getId(), null, "test", "test", true, null, null, new ArrayList<>());
         ItemDto itemDto = new ItemDto(1L, "test", "test", true, null);
-        ItemDto2 itemDto2 = new ItemDto2(1L, "test", "test", true, null, null, null, new ArrayList<>());
-        when(itemService.add(any(), any())).thenReturn(itemDto2);
+        ItemDtoFull itemDtoFull = new ItemDtoFull(1L, "test", "test", true, null, null, null, new ArrayList<>());
+        when(itemService.add(any(), any())).thenReturn(itemDtoFull);
 
         //Act
         mockMvc.perform(post("/items")
@@ -63,7 +63,7 @@ public class ItemControllerTest {
                         .accept(MediaType.APPLICATION_JSON))
                 //Assert
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(itemDto2.getId()));
+                .andExpect(jsonPath("$.id").value(itemDtoFull.getId()));
     }
 
     @Test
@@ -73,7 +73,7 @@ public class ItemControllerTest {
         User user = new User(Long.valueOf(1), "name", "email@email.com");
         Item item = new Item(1L, user.getId(), null, "test", "test", true, null, null, new ArrayList<>());
         ItemDto itemDto = new ItemDto(1L, "test", "test", true, null);
-        ItemDto2 itemDto2 = new ItemDto2(1L, "test", "test", true, null, null, null, new ArrayList<>());
+        ItemDtoFull itemDtoFull = new ItemDtoFull(1L, "test", "test", true, null, null, null, new ArrayList<>());
 
         Comment comment = new Comment();
         comment.setId(1L);
@@ -108,7 +108,7 @@ public class ItemControllerTest {
         User user = new User(Long.valueOf(1), "name", "email@email.com");
         Item item = new Item(1L, user.getId(), null, "test", "test", true, null, null, new ArrayList<>());
         ItemDto itemDto = new ItemDto(1L, "test", "test", true, null);
-        ItemDto2 itemDto2 = new ItemDto2(1L, "test", "test", true, null, null, null, new ArrayList<>());
+        ItemDtoFull itemDtoFull = new ItemDtoFull(1L, "test", "test", true, null, null, null, new ArrayList<>());
 
         Comment comment = new Comment();
         comment.setId(1L);
@@ -143,7 +143,7 @@ public class ItemControllerTest {
         User user = new User(Long.valueOf(1), "name", "email@email.com");
         Item item = new Item(1L, user.getId(), null, "test", "test", true, null, null, new ArrayList<>());
         ItemDto itemDto = new ItemDto(1L, "test", "test", true, null);
-        ItemDto2 itemDto2 = new ItemDto2(1L, "test", "test", true, null, null, null, new ArrayList<>());
+        ItemDtoFull itemDtoFull = new ItemDtoFull(1L, "test", "test", true, null, null, null, new ArrayList<>());
 
         Comment comment = new Comment();
         comment.setId(1L);
@@ -176,7 +176,7 @@ public class ItemControllerTest {
         User user = new User(Long.valueOf(1), "name", "email@email.com");
         Item item = new Item(1L, user.getId(), null, "test", "test", true, null, null, new ArrayList<>());
         ItemDto itemDto = new ItemDto(1L, "test", "test", true, null);
-        ItemDto2 itemDto2 = new ItemDto2(1L, "test", "test", true, null, null, null, new ArrayList<>());
+        ItemDtoFull itemDtoFull = new ItemDtoFull(1L, "test", "test", true, null, null, null, new ArrayList<>());
 
         Comment comment = new Comment();
         comment.setId(1L);
@@ -211,7 +211,7 @@ public class ItemControllerTest {
         User user = new User(Long.valueOf(1), "name", "email@email.com");
         Item item = new Item(1L, user.getId(), null, "test", "test", true, null, null, new ArrayList<>());
         ItemDto itemDto = new ItemDto(1L, "test", "test", true, null);
-        ItemDto2 itemDto2 = new ItemDto2(1L, "test", "test", true, null, null, null, new ArrayList<>());
+        ItemDtoFull itemDtoFull = new ItemDtoFull(1L, "test", "test", true, null, null, null, new ArrayList<>());
 
         Comment comment = new Comment();
         comment.setId(1L);
@@ -247,7 +247,7 @@ public class ItemControllerTest {
         User user = new User(Long.valueOf(1), "name", "email@email.com");
         Item item = new Item(1L, user.getId(), null, "test", "test", true, null, null, new ArrayList<>());
         ItemDto itemDto = new ItemDto(1L, "test", "test", true, null);
-        ItemDto2 itemDto2 = new ItemDto2(1L, "test", "test", true, null, null, null, new ArrayList<>());
+        ItemDtoFull itemDtoFull = new ItemDtoFull(1L, "test", "test", true, null, null, null, new ArrayList<>());
 
         Comment comment = new Comment();
         comment.setId(1L);

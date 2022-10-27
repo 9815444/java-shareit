@@ -5,23 +5,21 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.errors.BadRequestException;
 import ru.practicum.shareit.errors.NotFoundException;
 import ru.practicum.shareit.request.dto.RequestDto;
-import ru.practicum.shareit.request.dto.RequestDto2;
+import ru.practicum.shareit.request.dto.RequestDtoFull;
 import ru.practicum.shareit.user.UserRepository;
 
-import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class RequestServiceImpl implements RequestService {
 
     private final RequestRepository requestRepository;
-//    private final RequestPagingRepository requestPagingRepository;
 
     private final UserRepository userRepository;
 
@@ -41,7 +39,8 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Override
-    public List<RequestDto2> findRequests(Long userId) {
+    @Transactional(readOnly = true)
+    public List<RequestDtoFull> findRequests(Long userId) {
         if (!(userRepository.findById(userId).isPresent())) {
             throw new NotFoundException();
         }
@@ -51,7 +50,8 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Override
-    public RequestDto2 findRequest(Long userId, Long id) {
+    @Transactional(readOnly = true)
+    public RequestDtoFull findRequest(Long userId, Long id) {
         if (!(userRepository.findById(userId).isPresent())) {
             throw new NotFoundException();
         }
@@ -63,7 +63,8 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Override
-    public List<RequestDto2> findAllRequests(Long userId, Long from, Long size) {
+    @Transactional(readOnly = true)
+    public List<RequestDtoFull> findAllRequests(Long userId, Long from, Long size) {
         if (!(userRepository.findById(userId).isPresent())) {
             throw new NotFoundException();
         }
@@ -78,10 +79,8 @@ public class RequestServiceImpl implements RequestService {
         }
 
         int fromPage = from.intValue() / size.intValue();
-//        Pageable pageable = PageRequest.of(from.intValue(), size.intValue());
         Pageable pageable = PageRequest.of(fromPage, size.intValue(), Sort.by("created"));
 
-//        Pageable pageable = PageRequest.of(from.intValue() , size.intValue(), Sort.by("created"));
         return RequestMapper.listOfRequstToListOfRequestDto2(requestRepository.findAllByUserIdNot(userId, pageable).getContent());
     }
 }

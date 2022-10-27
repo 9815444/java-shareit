@@ -10,7 +10,7 @@ import ru.practicum.shareit.errors.BadRequestException;
 import ru.practicum.shareit.errors.NotFoundException;
 import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.item.dto.ItemDto2;
+import ru.practicum.shareit.item.dto.ItemDtoFull;
 import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.request.Request;
@@ -40,7 +40,7 @@ public class ItemServiceImpl implements ItemService {
     private final RequestRepository requestRepository;
 
     @Override
-    public ItemDto2 add(Long userId, ItemDto itemDto) {
+    public ItemDtoFull add(Long userId, ItemDto itemDto) {
         validation.itemIsValidAdd(userId, itemDto);
         Item item = ItemMapper.itemDtoToItem(itemDto);
         item.setUserId(userId);
@@ -58,8 +58,6 @@ public class ItemServiceImpl implements ItemService {
         validation.itemIsValidUpdate(userId, id);
 
         Item item = find(id);
-//        Item updatedItem = new Item(id, userId, requestRepository.findById(), item.getName(),
-//                item.getDescription(), item.getAvailable(), null, null, null);
 
         if (itemDto.getName() != null) {
             item.setName(itemDto.getName());

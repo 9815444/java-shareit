@@ -36,7 +36,6 @@ public class ErrorHandler {
         HttpStatus httpStatus = e.getStatus();
         return new ResponseEntity<>(
                 Map.of("error", e.getMessage()), httpStatus);
-//        return Map.of("error", e.getMessage());
     }
 
     @ExceptionHandler(Exception.class)

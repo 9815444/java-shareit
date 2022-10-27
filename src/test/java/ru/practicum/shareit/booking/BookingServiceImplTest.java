@@ -17,7 +17,7 @@ import ru.practicum.shareit.errors.UnsupportedStatusException;
 import ru.practicum.shareit.item.CommentRepository;
 import ru.practicum.shareit.item.ItemRepository;
 import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.item.dto.ItemDto2;
+import ru.practicum.shareit.item.dto.ItemDtoFull;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.UserRepository;
 import ru.practicum.shareit.user.dto.UserDto;
@@ -65,7 +65,7 @@ public class BookingServiceImplTest {
         User user = new User(Long.valueOf(1), "name", "email@email.com");
         Item item = new Item(1L, user.getId(), null, "test", "test", true, null, null, new ArrayList<>());
         ItemDto itemDto = new ItemDto(1L, "test", "test", true, null);
-        ItemDto2 itemDto2 = new ItemDto2(1L, "test", "test", true, null, null, null, new ArrayList<>());
+        ItemDtoFull itemDtoFull = new ItemDtoFull(1L, "test", "test", true, null, null, null, new ArrayList<>());
 
         when(itemRepository.findById(any())).thenReturn(Optional.of(item));
 
@@ -82,7 +82,7 @@ public class BookingServiceImplTest {
         User user = new User(Long.valueOf(1), "name", "email@email.com");
         Item item = new Item(1L, user.getId(), null, "test", "test", true, null, null, new ArrayList<>());
         ItemDto itemDto = new ItemDto(1L, "test", "test", true, null);
-        ItemDto2 itemDto2 = new ItemDto2(1L, "test", "test", true, null, null, null, new ArrayList<>());
+        ItemDtoFull itemDtoFull = new ItemDtoFull(1L, "test", "test", true, null, null, null, new ArrayList<>());
 
         when(itemRepository.findById(any())).thenReturn(Optional.ofNullable(null));
 
@@ -115,7 +115,7 @@ public class BookingServiceImplTest {
         User user = new User(Long.valueOf(1), "name", "email@email.com");
         Item item = new Item(1L, user.getId(), null, "test", "test", true, null, null, new ArrayList<>());
         ItemDto itemDto = new ItemDto(1L, "test", "test", true, null);
-        ItemDto2 itemDto2 = new ItemDto2(1L, "test", "test", true, null, null, null, new ArrayList<>());
+        ItemDtoFull itemDtoFull = new ItemDtoFull(1L, "test", "test", true, null, null, null, new ArrayList<>());
 
         Booking booking = new Booking();
         booking.setId(1L);
@@ -145,7 +145,7 @@ public class BookingServiceImplTest {
         User user = new User(Long.valueOf(1), "name", "email@email.com");
         Item item = new Item(1L, user.getId(), null, "test", "test", true, null, null, new ArrayList<>());
         ItemDto itemDto = new ItemDto(1L, "test", "test", true, null);
-        ItemDto2 itemDto2 = new ItemDto2(1L, "test", "test", true, null, null, null, new ArrayList<>());
+        ItemDtoFull itemDtoFull = new ItemDtoFull(1L, "test", "test", true, null, null, null, new ArrayList<>());
 
         when(itemRepository.findById(any())).thenReturn(Optional.ofNullable(null));
 
@@ -162,7 +162,7 @@ public class BookingServiceImplTest {
         User user = new User(Long.valueOf(1), "name", "email@email.com");
         Item item = new Item(1L, user.getId(), null, "test", "test", true, null, null, new ArrayList<>());
         ItemDto itemDto = new ItemDto(1L, "test", "test", true, null);
-        ItemDto2 itemDto2 = new ItemDto2(1L, "test", "test", true, null, null, null, new ArrayList<>());
+        ItemDtoFull itemDtoFull = new ItemDtoFull(1L, "test", "test", true, null, null, null, new ArrayList<>());
 
         Booking booking = new Booking();
         booking.setId(1L);
@@ -194,7 +194,7 @@ public class BookingServiceImplTest {
         User user = new User(Long.valueOf(2), "name", "email@email.com");
         Item item = new Item(1L, user.getId(), null, "test", "test", true, null, null, new ArrayList<>());
         ItemDto itemDto = new ItemDto(1L, "test", "test", true, null);
-        ItemDto2 itemDto2 = new ItemDto2(1L, "test", "test", true, null, null, null, new ArrayList<>());
+        ItemDtoFull itemDtoFull = new ItemDtoFull(1L, "test", "test", true, null, null, null, new ArrayList<>());
 
         Booking booking = new Booking();
         booking.setId(1L);

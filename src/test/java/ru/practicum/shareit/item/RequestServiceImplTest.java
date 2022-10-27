@@ -11,7 +11,7 @@ import org.springframework.data.domain.Pageable;
 import ru.practicum.shareit.errors.BadRequestException;
 import ru.practicum.shareit.errors.NotFoundException;
 import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.item.dto.ItemDto2;
+import ru.practicum.shareit.item.dto.ItemDtoFull;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.request.Request;
 import ru.practicum.shareit.request.RequestRepository;
@@ -53,7 +53,7 @@ public class RequestServiceImplTest {
         User user = new User(Long.valueOf(1), "name", "email@email.com");
         Item item = new Item(1L, user.getId(), null, "test", "test", true, null, null, new ArrayList<>());
         ItemDto itemDto = new ItemDto(1L, "test", "test", true, null);
-        ItemDto2 itemDto2 = new ItemDto2(1L, "test", "test", true, null, null, null, new ArrayList<>());
+        ItemDtoFull itemDtoFull = new ItemDtoFull(1L, "test", "test", true, null, null, null, new ArrayList<>());
 
         Request request = new Request();
         request.setId(1L);
@@ -84,7 +84,7 @@ public class RequestServiceImplTest {
         User user = new User(Long.valueOf(1), "name", "email@email.com");
         Item item = new Item(1L, user.getId(), null, "test", "test", true, null, null, new ArrayList<>());
         ItemDto itemDto = new ItemDto(1L, "test", "test", true, null);
-        ItemDto2 itemDto2 = new ItemDto2(1L, "test", "test", true, null, null, null, new ArrayList<>());
+        ItemDtoFull itemDtoFull = new ItemDtoFull(1L, "test", "test", true, null, null, null, new ArrayList<>());
 
         Request request = new Request();
         request.setId(1L);
@@ -115,7 +115,7 @@ public class RequestServiceImplTest {
         User user = new User(Long.valueOf(1), "name", "email@email.com");
         Item item = new Item(1L, user.getId(), null, "test", "test", true, null, null, new ArrayList<>());
         ItemDto itemDto = new ItemDto(1L, "test", "test", true, null);
-        ItemDto2 itemDto2 = new ItemDto2(1L, "test", "test", true, null, null, null, new ArrayList<>());
+        ItemDtoFull itemDtoFull = new ItemDtoFull(1L, "test", "test", true, null, null, null, new ArrayList<>());
 
         Request request = new Request();
         request.setId(1L);
@@ -146,7 +146,7 @@ public class RequestServiceImplTest {
         User user = new User(Long.valueOf(1), "name", "email@email.com");
         Item item = new Item(1L, user.getId(), null, "test", "test", true, null, null, new ArrayList<>());
         ItemDto itemDto = new ItemDto(1L, "test", "test", true, null);
-        ItemDto2 itemDto2 = new ItemDto2(1L, "test", "test", true, null, null, null, new ArrayList<>());
+        ItemDtoFull itemDtoFull = new ItemDtoFull(1L, "test", "test", true, null, null, null, new ArrayList<>());
 
         Request request = new Request();
         request.setId(1L);
@@ -198,7 +198,7 @@ public class RequestServiceImplTest {
         User user = new User(Long.valueOf(1), "name", "email@email.com");
         Item item = new Item(1L, user.getId(), null, "test", "test", true, null, null, new ArrayList<>());
         ItemDto itemDto = new ItemDto(1L, "test", "test", true, null);
-        ItemDto2 itemDto2 = new ItemDto2(1L, "test", "test", true, null, null, null, new ArrayList<>());
+        ItemDtoFull itemDtoFull = new ItemDtoFull(1L, "test", "test", true, null, null, null, new ArrayList<>());
 
         Request request = new Request();
         request.setId(1L);
@@ -236,7 +236,7 @@ public class RequestServiceImplTest {
         User user = new User(Long.valueOf(1), "name", "email@email.com");
         Item item = new Item(1L, user.getId(), null, "test", "test", true, null, null, new ArrayList<>());
         ItemDto itemDto = new ItemDto(1L, "test", "test", true, null);
-        ItemDto2 itemDto2 = new ItemDto2(1L, "test", "test", true, null, null, null, new ArrayList<>());
+        ItemDtoFull itemDtoFull = new ItemDtoFull(1L, "test", "test", true, null, null, null, new ArrayList<>());
 
         Request request = new Request();
         request.setId(1L);

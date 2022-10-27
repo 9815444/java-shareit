@@ -11,7 +11,7 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @Setter
-public class ItemDto2 {
+public class ItemDtoFull {
     private Long id;
     private String name;
     private String description;

@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import ru.practicum.shareit.item.dto.ItemDto2;
+import ru.practicum.shareit.item.dto.ItemDtoFull;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -14,12 +14,12 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-public class RequestDto2 {
+public class RequestDtoFull {
 
     private Long id;
     private Long userId;
     private String description;
     private LocalDateTime created;
-    private List<ItemDto2> items = new ArrayList<>();
+    private List<ItemDtoFull> items = new ArrayList<>();
 
 }
