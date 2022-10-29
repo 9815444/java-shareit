@@ -26,12 +26,6 @@ public class UserValidation {
         emailValidation(userDto.getEmail());
     }
 
-//    private void emailValidation(String email) {
-//       String regexPattern = "^(?=.{1,64}@)[A-Za-z0-9\\+_-]+(\\.[A-Za-z0-9\\+_-]+)*@"
-//                + "[^-][A-Za-z0-9\\+-]+(\\.[A-Za-z0-9\\+-]+)*(\\.[A-Za-z]{2,})$";
-//       EmailValidation.patternMatches(email, regexPattern));
-//    }
-
     public void emailValidation(String email) {
         try {
             InternetAddress emailAddr = new InternetAddress(email);

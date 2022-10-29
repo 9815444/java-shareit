@@ -30,13 +30,19 @@ public class BookingController {
     }
 
     @GetMapping("")
-    public List<Booking> getAll(@RequestHeader("X-Sharer-User-Id") Long userId, @RequestParam(required = false) String state) {
-        return bookingService.findAll(userId, state);
+    public List<Booking> getAllPag(@RequestHeader("X-Sharer-User-Id") Long userId,
+                                   @RequestParam(required = false) String state,
+                                   @RequestParam(required = false) Long from,
+                                   @RequestParam(required = false) Long size) {
+        return bookingService.findAll(userId, state, from, size);
     }
 
     @GetMapping("/owner")
-    public List<Booking> getAllByOwner(@RequestHeader("X-Sharer-User-Id") Long userId, @RequestParam(required = false) String state) {
-        return bookingService.findAllByOwner(userId, state);
+    public List<Booking> getAllByOwner(@RequestHeader("X-Sharer-User-Id") Long userId,
+                                       @RequestParam(required = false) String state,
+                                       @RequestParam(required = false) Long from,
+                                       @RequestParam(required = false) Long size) {
+        return bookingService.findAllByOwner(userId, state, from, size);
     }
 
 }

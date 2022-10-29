@@ -1,6 +1,8 @@
 package ru.practicum.shareit.booking;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingDtoForItem;
@@ -92,11 +94,8 @@ public class BookingServiceImpl implements BookingService {
         return new BookingDtoForItem(booking.getId(), booking.getUserId());
     }
 
-
     @Override
     public Booking add(Long userId, BookingDto bookingDto) {
-//        User user = userService.findUser(userId);
-//        Item item = itemService.find(bookingDto.getItemId());
         User user = findUser(userId);
         Item item = findItem(bookingDto.getItemId());
         if (!item.getAvailable()) {
@@ -144,13 +143,11 @@ public class BookingServiceImpl implements BookingService {
             throw new NotFoundException();
         }
         Booking booking = bookingOptional.get();
-//        Item item = itemService.find(booking.getItemId());
         Item item = findItem(booking.getItemId());
         if (!((booking.getUserId().equals(userId)) || (item.getUserId().equals(userId)))) {
             throw new NotFoundException();
         }
         booking.setItem(item);
-//        User user = userService.findUser(booking.getUserId());
         User user = findUser(booking.getUserId());
         booking.setBooker(user);
         return booking;
@@ -164,7 +161,6 @@ public class BookingServiceImpl implements BookingService {
         if (state == null) {
             state = "ALL";
         }
-//        User user = userService.findUser(userId);
         User user = findUser(userId);
         if (state.equals("ALL")) {
             List<Booking> bookings = repository.findByUserIdOrderByStartDesc(userId)
@@ -202,6 +198,131 @@ public class BookingServiceImpl implements BookingService {
                     .filter(booking -> booking.getStatus().equals("WAITING"))
                     .collect(Collectors.toList());
             return bookings;
+        } else {
+            throw new UnsupportedStatusException(state);
+        }
+    }
+
+    @Override
+    public List<Booking> findAll(Long userId, String state, Long from, Long size) {
+
+        if ((from == null) || (size == null)) {
+            return findAll(userId, state);
+        }
+        if ((from < 0) || (size <= 0)) {
+            throw new BadRequestException();
+        }
+
+        if (userId == null) {
+            throw new NotFoundException();
+        }
+        if (state == null) {
+            state = "ALL";
+        }
+
+        Long countBooking =  Long.valueOf(repository.findByUserIdOrderByStartDesc(userId).size());
+
+
+        int fromPage = from.intValue() / size.intValue();
+        Pageable pageable = PageRequest.of(fromPage, size.intValue());
+
+        User user = findUser(userId);
+
+        if (state.equals("ALL")) {
+            List<Booking> bookings = repository.findByUserIdOrderByStartDesc(userId, pageable).getContent()
+                    .stream().map((booking -> addItemAndBooker(booking))).collect(Collectors.toList());
+            return bookings;
+        } else if (state.equals("FUTURE")) {
+            List<Booking> bookings = repository.findByUserIdOrderByStartDesc(userId, pageable).getContent()
+                    .stream().map((booking -> addItemAndBooker(booking)))
+                    .filter(booking -> booking.getStart().isAfter(LocalDateTime.now()))
+                    .collect(Collectors.toList());
+            return bookings;
+        } else if (state.equals("CURRENT")) {
+            List<Booking> bookings = repository.findByUserIdOrderByStartDesc(userId, pageable).getContent()
+                    .stream().map((booking -> addItemAndBooker(booking)))
+                    .filter(booking ->
+                            booking.getStart().isBefore(LocalDateTime.now())
+                                    && booking.getEnd().isAfter(LocalDateTime.now()))
+                    .collect(Collectors.toList());
+            return bookings;
+        } else if (state.equals("PAST")) {
+            List<Booking> bookings = repository.findByUserIdOrderByStartDesc(userId, pageable).getContent()
+                    .stream().map((booking -> addItemAndBooker(booking)))
+                    .filter(booking -> booking.getEnd().isBefore(LocalDateTime.now()))
+                    .collect(Collectors.toList());
+            return bookings;
+        } else if (state.equals("REJECTED")) {
+            List<Booking> bookings = repository.findByUserIdOrderByStartDesc(userId, pageable).getContent()
+                    .stream().map((booking -> addItemAndBooker(booking)))
+                    .filter(booking -> booking.getStatus().equals("REJECTED"))
+                    .collect(Collectors.toList());
+            return bookings;
+        } else if (state.equals("WAITING")) {
+            List<Booking> bookings = repository.findByUserIdOrderByStartDesc(userId, pageable).getContent()
+                    .stream().map((booking -> addItemAndBooker(booking)))
+                    .filter(booking -> booking.getStatus().equals("WAITING"))
+                    .collect(Collectors.toList());
+            return bookings;
+        } else {
+            throw new UnsupportedStatusException(state);
+        }
+    }
+
+    @Override
+    public List<Booking> findAllByOwner(Long ownerId, String state, Long from, Long size) {
+
+        if ((from == null) || (size == null)) {
+            return findAllByOwner(ownerId, state);
+        }
+        if ((from < 0) || (size <= 0)) {
+            throw new BadRequestException();
+        }
+
+        if (ownerId == null) {
+            throw new NotFoundException();
+        }
+        if (state == null) {
+            state = "ALL";
+        }
+
+        int fromPage = from.intValue() / size.intValue();
+        Pageable pageable = PageRequest.of(fromPage, size.intValue());
+
+        User owner = findUser(ownerId);
+        List<Long> itemsId = findUserItems(ownerId).stream()
+                .map((item -> item.getId())).collect(Collectors.toList());
+        if (state.equals("ALL")) {
+            return repository.findByItemIdInOrderByStartDesc(itemsId, pageable).getContent()
+                    .stream().map((booking -> addItemAndBooker(booking)))
+                    .collect(Collectors.toList());
+        } else if (state.equals("FUTURE")) {
+            return repository.findByItemIdInOrderByStartDesc(itemsId, pageable).getContent()
+                    .stream().map((booking -> addItemAndBooker(booking)))
+                    .filter(booking -> booking.getStart().isAfter(LocalDateTime.now()))
+                    .collect(Collectors.toList());
+        } else if (state.equals("CURRENT")) {
+            return repository.findByItemIdInOrderByStartDesc(itemsId, pageable).getContent()
+                    .stream().map((booking -> addItemAndBooker(booking)))
+                    .filter(booking ->
+                            booking.getStart().isBefore(LocalDateTime.now())
+                                    && booking.getEnd().isAfter(LocalDateTime.now()))
+                    .collect(Collectors.toList());
+        } else if (state.equals("PAST")) {
+            return repository.findByItemIdInOrderByStartDesc(itemsId, pageable).getContent()
+                    .stream().map((booking -> addItemAndBooker(booking)))
+                    .filter(booking -> booking.getEnd().isBefore(LocalDateTime.now()))
+                    .collect(Collectors.toList());
+        } else if (state.equals("REJECTED")) {
+            return repository.findByItemIdInOrderByStartDesc(itemsId, pageable).getContent()
+                    .stream().map((booking -> addItemAndBooker(booking)))
+                    .filter(booking -> booking.getStatus().equals("REJECTED"))
+                    .collect(Collectors.toList());
+        } else if (state.equals("WAITING")) {
+            return repository.findByItemIdInOrderByStartDesc(itemsId, pageable).getContent()
+                    .stream().map((booking -> addItemAndBooker(booking)))
+                    .filter(booking -> booking.getStatus().equals("WAITING"))
+                    .collect(Collectors.toList());
         } else {
             throw new UnsupportedStatusException(state);
         }

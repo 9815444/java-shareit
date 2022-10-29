@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import ru.practicum.shareit.booking.dto.BookingDtoForItem;
+import ru.practicum.shareit.request.Request;
 
 import javax.persistence.*;
 import java.util.List;
@@ -22,6 +23,10 @@ public class Item {
 
     @Column(name = "user_id")
     private Long userId;
+
+    @ManyToOne
+    @JoinColumn(name = "request_id")
+    private Request request;
 
     @Column(name = "name")
     private String name;

@@ -10,8 +10,11 @@ import ru.practicum.shareit.errors.BadRequestException;
 import ru.practicum.shareit.errors.NotFoundException;
 import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.item.dto.ItemDtoFull;
 import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.request.Request;
+import ru.practicum.shareit.request.RequestRepository;
 import ru.practicum.shareit.user.UserRepository;
 import ru.practicum.shareit.user.model.User;
 
@@ -34,12 +37,19 @@ public class ItemServiceImpl implements ItemService {
 
     private final ItemValidation validation;
 
+    private final RequestRepository requestRepository;
+
     @Override
-    public Item add(Long userId, ItemDto itemDto) {
+    public ItemDtoFull add(Long userId, ItemDto itemDto) {
         validation.itemIsValidAdd(userId, itemDto);
         Item item = ItemMapper.itemDtoToItem(itemDto);
         item.setUserId(userId);
-        return repository.save(item);
+        if (itemDto.getRequestId() != null) {
+            Request request = requestRepository.findById(itemDto.getRequestId()).orElseThrow();
+            request.addItem(item);
+        }
+        var savedItem = repository.save(item);
+        return ItemMapper.itemToItemDto2(savedItem);
     }
 
     @Override
@@ -48,20 +58,18 @@ public class ItemServiceImpl implements ItemService {
         validation.itemIsValidUpdate(userId, id);
 
         Item item = find(id);
-        Item updatedItem = new Item(id, userId, item.getName(),
-                item.getDescription(), item.getAvailable(), null, null, null);
 
         if (itemDto.getName() != null) {
-            updatedItem.setName(itemDto.getName());
+            item.setName(itemDto.getName());
         }
         if (itemDto.getDescription() != null) {
-            updatedItem.setDescription(itemDto.getDescription());
+            item.setDescription(itemDto.getDescription());
         }
         if (itemDto.getAvailable() != null) {
-            updatedItem.setAvailable(itemDto.getAvailable());
+            item.setAvailable(itemDto.getAvailable());
         }
 
-        return repository.save(updatedItem);
+        return repository.save(item);
 
     }
 
