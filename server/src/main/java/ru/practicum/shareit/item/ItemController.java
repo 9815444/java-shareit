@@ -8,7 +8,6 @@ import ru.practicum.shareit.item.dto.ItemDtoFull;
 import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -16,10 +15,9 @@ import java.util.List;
 @RequestMapping("/items")
 public class ItemController {
     private final ItemService itemService;
-//    private final ItemValidation itemValidation;
 
     @PostMapping
-    public ItemDtoFull addItem(@RequestHeader("X-Sharer-User-Id") Long userId, @Valid @RequestBody ItemDto itemDto) {
+    public ItemDtoFull addItem(@RequestHeader("X-Sharer-User-Id") Long userId, @RequestBody ItemDto itemDto) {
         return itemService.add(userId, itemDto);
     }
 
@@ -30,7 +28,7 @@ public class ItemController {
     }
 
     @PatchMapping("/{id}")
-    public Item updateItem(@RequestHeader("X-Sharer-User-Id") Long userId, @PathVariable Long id, @Valid @RequestBody ItemDto itemDto) {
+    public Item updateItem(@RequestHeader("X-Sharer-User-Id") Long userId, @PathVariable Long id, @RequestBody ItemDto itemDto) {
         return itemService.update(userId, id, itemDto);
     }
 
