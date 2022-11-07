@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 //@Service
-//@AllArgsConstructor
+@AllArgsConstructor
 public class UserValidation {
 
     public static void userIsValidAdd(UserDto userDto, UserClient userClient) {

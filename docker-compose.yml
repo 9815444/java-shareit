@@ -9,7 +9,7 @@ services:
     volumes:
       - /var/lib/postgresql/data/
     environment:
-      - POSTGRES_USER=shareit
+      - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=shareit
       - POSTGRES_DB=shareit
 

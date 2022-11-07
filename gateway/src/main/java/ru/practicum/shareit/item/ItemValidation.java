@@ -14,7 +14,7 @@ import java.util.Map;
 @AllArgsConstructor
 public class ItemValidation {
 
-    private final UserValidation userValidation;
+//    private final UserValidation userValidation;
 
     private UserClient userClient;
     private ItemClient itemClient;
@@ -24,7 +24,7 @@ public class ItemValidation {
         if (userId == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User id is null.");
         }
-        userValidation.userIsPresent(userId, userClient);
+        UserValidation.userIsPresent(userId, userClient);
         if (itemDto.getName() == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Name is null.");
         }
@@ -50,7 +50,7 @@ public class ItemValidation {
         if (userId == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User id is null.");
         }
-        userValidation.userIsPresent(userId, userClient);
+        UserValidation.userIsPresent(userId, userClient);
 
         var item = (Map<String, Object>) itemClient.getItem(userId, id).getBody();
 
