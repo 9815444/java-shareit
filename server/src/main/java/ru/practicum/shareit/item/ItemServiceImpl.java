@@ -35,13 +35,10 @@ public class ItemServiceImpl implements ItemService {
 
     private final BookingRepository bookingRepository;
 
-    private final ItemValidation validation;
-
     private final RequestRepository requestRepository;
 
     @Override
     public ItemDtoFull add(Long userId, ItemDto itemDto) {
-//        validation.itemIsValidAdd(userId, itemDto);
         Item item = ItemMapper.itemDtoToItem(itemDto);
         item.setUserId(userId);
         if (itemDto.getRequestId() != null) {
@@ -54,8 +51,6 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public Item update(Long userId, Long id, ItemDto itemDto) {
-
-//        validation.itemIsValidUpdate(userId, id);
 
         Item item = find(id);
 
@@ -75,7 +70,6 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public void delete(Long id, Long userId) {
-//        validation.itemIsValidDelete(userId, id);
         repository.delete(find(id));
     }
 

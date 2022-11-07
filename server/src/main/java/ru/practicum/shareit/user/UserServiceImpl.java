@@ -16,11 +16,9 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository repository;
-    private final UserValidation validation;
 
     @Override
     public User addUser(UserDto userDto) {
-//        validation.userIsValidAdd(userDto);
         User user = UserMapper.userDtoToUser(userDto);
         User user1 = repository.save(user);
         return user1;
@@ -28,8 +26,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User updateUser(Long id, UserDto userDto) {
-
-//        validation.userIsValidUpdate(userDto);
 
         User user = findUser(id);
         User updatedUser = new User(id, user.getName(), user.getEmail());

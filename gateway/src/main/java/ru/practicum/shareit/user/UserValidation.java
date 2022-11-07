@@ -12,8 +12,8 @@ import javax.mail.internet.InternetAddress;
 import java.util.List;
 import java.util.Map;
 
-@Service
-@AllArgsConstructor
+//@Service
+//@AllArgsConstructor
 public class UserValidation {
 
     public static void userIsValidAdd(UserDto userDto, UserClient userClient) {
