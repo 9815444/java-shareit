@@ -2,7 +2,6 @@ package ru.practicum.shareit.user;
 
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import ru.practicum.shareit.errors.BadRequestException;
 import ru.practicum.shareit.user.dto.UserDto;
