@@ -14,8 +14,6 @@ import java.util.Map;
 @AllArgsConstructor
 public class ItemValidation {
 
-//    private final UserValidation userValidation;
-
     private UserClient userClient;
     private ItemClient itemClient;
 
